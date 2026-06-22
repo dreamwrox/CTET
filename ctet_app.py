@@ -61,7 +61,7 @@ FREE_QUESTION_LIMIT = 3          # free questions before paywall
 # UPI payment details
 YOUR_UPI_ID = "harjeet.pahwa@oksbi"
 MERCHANT_NAME = "CTET Practice"
-PREMIUM_PRICE_INR = "99"         # launch offer (regular 199)
+PREMIUM_PRICE_INR = "199"         # launch offer (regular 199)
 
 # Paid-customer unlock codes -- add one line per paying customer
 UNLOCK_CODES = [
@@ -69,7 +69,7 @@ UNLOCK_CODES = [
     # "CTET-RAVI-2026",         # <- add a line like this for each paid customer
 ]
 
-WHATSAPP_NUMBER = "91XXXXXXXXXX"  # <-- replace with your WhatsApp number, keep 91 prefix
+WHATSAPP_NUMBER = "8800138095"  # <-- replace with your WhatsApp number, keep 91 prefix
 
 # =========================================================
 # PAGE + HEADER

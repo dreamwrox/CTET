@@ -61,7 +61,7 @@ FREE_QUESTION_LIMIT = 3          # free questions before paywall
 # UPI payment details
 YOUR_UPI_ID = "harjeet.pahwa@oksbi"
 MERCHANT_NAME = "CTET Practice"
-PREMIUM_PRICE_INR = "199"         # launch offer (regular 199)
+PREMIUM_PRICE_INR = "99"         # launch offer (regular 199)
 
 # Paid-customer unlock codes -- add one line per paying customer
 UNLOCK_CODES = [
@@ -69,7 +69,7 @@ UNLOCK_CODES = [
     # "CTET-RAVI-2026",         # <- add a line like this for each paid customer
 ]
 
-WHATSAPP_NUMBER = "8800138095"  # <-- replace with your WhatsApp number, keep 91 prefix
+WHATSAPP_NUMBER = "91XXXXXXXXXX"  # <-- replace with your WhatsApp number, keep 91 prefix
 
 # =========================================================
 # PAGE + HEADER
@@ -111,6 +111,7 @@ defaults = {
     "selected_paper": None,
     "selected_section": None,
     "seen_indexes": [],       # to avoid repeats
+    "chosen_index": None,     # which option the user picked for the current question
 }
 for k, v in defaults.items():
     if k not in st.session_state:
@@ -249,27 +250,26 @@ else:
                 if choice is None:
                     st.warning("Please select an answer first.")
                 else:
+                    # remember which option the user chose, so we can show the
+                    # result correctly after the page reruns
+                    st.session_state.chosen_index = q["options"].index(choice)
                     st.session_state.answered_current = True
                     st.session_state.answered_count += 1
-                    chosen_index = q["options"].index(choice)
-                    if chosen_index == q["answer"]:
+                    if st.session_state.chosen_index == q["answer"]:
                         st.session_state.score += 1
-                        st.success("✅ Correct!")
-                    else:
-                        correct_text = q["options"][q["answer"]]
-                        st.error(f"❌ Incorrect. Correct answer: {correct_text}")
-                    st.info(f"Explanation: {q['explain']}")
                     st.rerun()
         else:
-            # already answered -> show result + next button
-            chosen_index = q["options"].index(choice) if choice in q["options"] else None
+            # already answered -> show the stored result + next button
+            chosen_index = st.session_state.get("chosen_index")
+            correct_text = q["options"][q["answer"]]
             if chosen_index == q["answer"]:
                 st.success("✅ Correct!")
             else:
-                st.error(f"❌ Correct answer: {q['options'][q['answer']]}")
+                st.error(f"❌ Incorrect. Correct answer: {correct_text}")
             st.info(f"Explanation: {q['explain']}")
 
             if st.button("Next Question ➡️"):
                 st.session_state.current_q = None
                 st.session_state.answered_current = False
+                st.session_state.chosen_index = None
                 st.rerun()
